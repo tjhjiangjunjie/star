@@ -1,0 +1,47 @@
+<% include header %>
+<div class="container" style="margin-top: 70px;">
+    <div class="col-md-12">
+        <h4 style="display: inline-block;color: #317eac;"><%= typeid %></h4>
+        <span style="margin-left: 20px;color: #888;">( <%= name %> )</span>
+        <% if(user){ %>
+            <% if(user.name!=name){ %>
+            <div><a class="btn btn-primary btn-xs" style="border-radius: 3px;" href="/home/<%= email %>"><%= name %>的主页</a></div>
+            <% } %>
+        <% }else{ %>
+        <div><a class="btn btn-primary btn-xs" style="border-radius: 3px;" href="/home/<%= email %>"><%= name %>的主页</a></div>
+        <% } %>
+        <hr>
+        <% if(posts.length==0){ %>
+        <p>额，他还什么都木有写……</p>
+        <% } %>
+        <% posts.forEach(function (post, index) { %>
+        <div style="margin-bottom: 20px;">
+            <h4>
+                <a style="color: #2fa4ea;" href="/diary?id=<%= post._id %>"><%= post.name %>的日记</a>
+                <small>[<%= post.typeid %>]</small>
+                <% if(post.weather){ %>
+                <small>[天气：<%= post.weather %>]</small>
+                <% } %>
+                <% if(post.mood){ %>
+                <small>[心情：<%= post.mood %>]</small>
+                <% } %>
+                <% if(post.location){ %>
+                <small>[地点：<%= post.location %>]</small>
+                <% } %>
+            </h4>
+            <div class="Diary-content">
+                <p style="line-height: 40px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><%= post.content %></p>
+            </div>
+            <div class="bar" style="color: #888;display: inline-block;"><%= post.time.minute %> <small><%= post.comments.length %>回复 </small><small><%= post.pv %>阅读 </small></div>
+            <% if( user && user.name == post.name ){ %>
+            <div class="btn-group btn-group-xs" style="display: inline-block;">
+                <a type="button" class="btn btn-default" href="/edit/<%= post._id %>">Edit</a>
+                <a type="button" class="btn btn-danger" href="/remove/<%= post._id %>">Del</a>
+            </div>
+            <% } %>
+        </div>
+        <% }) %>
+        <% include page %>
+    </div>
+</div>
+<% include footer %>

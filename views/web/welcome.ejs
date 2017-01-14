@@ -1,0 +1,29 @@
+<h4 style="color: #317eac;">欢迎回来，<%= user.name %></h4>
+<hr>
+<div class="btn-group btn-group-sm">
+    <a type="button" class="btn btn-primary" href="/post">写日记</a>
+    <a type="button" class="btn btn-default" href="/type">管理日记本</a>
+</div>
+<hr>
+<div style="text-align: center;background-color: #f9f9f9;padding: 15px 0;">
+    <p style="font-size: 18px;color: #2fa4ea;" >距离明天还有：<span id="hour">0</span>小时<span id="min">0</span>分钟</p>
+    <p style="font-size: 12px;color: #2fa4ea;">（GMT+8 GreenWich Mean Time）</p>
+</div>
+<hr>
+<script>
+    $(function () {
+        function newtime() {
+            var time = new Date();
+            var hour = time.getHours();
+            var minute = time.getMinutes();
+            var newtime = hour * 60 + minute;
+            var remtime = 24*60 - newtime;
+            var remhour = Math.floor(remtime/60);
+            var remmin = remmin<10 ? '0'+remtime%60 : remtime%60;
+            $('#hour').html(remhour);
+            $('#min').html(remmin);
+        }
+        newtime();
+        setInterval(newtime,1000);
+    })
+</script>

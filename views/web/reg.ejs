@@ -1,0 +1,57 @@
+<% include header %>
+<div class="container" ng-app="webApp">
+    <div class="col-md-12">
+        <h4 style="margin-top: 70px;">注册兔耳</h4>
+        <hr>
+        <div class="col-md-4 col-md-offset-4 min-hight" style="margin-bottom: 60px;margin-top: 30px;">
+            <div class="reBoard" ng-controller="userReg">
+                <form name="regForm" ng-submit="processRegForm(regForm.$valid)" novalidate>
+                    <small class="text-danger hide" id="errorInfo">邮箱格式不正确</small>
+                    <div class="form-group">
+                        <!--<input type="text" class="form-control"  name="userName" id="userName" ng-minlength="5" ng-maxlength="12" ng-model="regFormData.userName" ng-pattern="/^[a-zA-Z][a-zA-Z0-9_]{4,11}$/" placeholder="请输入用户名" required/>-->
+                        <input type="text" class="form-control"  name="name" id="useName" ng-minlength="2" ng-maxlength="15" ng-model="regFormData.name" ng-pattern="/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/" placeholder="请输入用户名" required/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="regForm.name.$invalid && !regForm.name.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 用户名2-15个英文数字汉字组合</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" placeholder="请输入邮箱地址" ng-model="regFormData.email" ng-pattern="/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/" required/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="regForm.email.$invalid && !regForm.email.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 请填写正确的邮箱地址</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="userPassword" name="password" placeholder="请输入密码" ng-pattern="/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}/" ng-maxlength="15" ng-model="regFormData.password" required/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="regForm.password.$invalid && !regForm.password.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 6-15位，只能包含字母、数字和下划线</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" pw-check="userPassword" name="confirmPassword" placeholder="请再次输入密码" ng-model="regFormData.confirmPassword" ng-pattern="/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{6,}/" ng-maxlength="15" required/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="regForm.confirmPassword.$invalid && !regForm.confirmPassword.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 两次输入的密码不匹配</label>
+                    </div>
+                    <div>
+                        <button class="btn btn-default" role="button" ng-disabled="regForm.$invalid">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include footer %>
+<script>
+    var webApp = angular.module('webApp',[]);
+    webApp.controller("userReg",function($scope,$http){
+        $scope.processRegForm = function(isVaild){
+            if(isVaild){
+                $http({
+                    method:'POST',
+                    url:'/doReg',
+                    data: $.param($scope.regFormData),
+                    headers:{'Content-Type':'application/x-www-form-urlencoded'}
+                }).success(function(data){
+                    if (data === "success") {
+                        alert("注册成功,您现在可以登录")
+                        window.location = "/login"
+                    } else {
+                        $('#errorInfo').removeClass('hide').text(data)
+                    }
+                })
+            }
+        }
+    })
+</script>

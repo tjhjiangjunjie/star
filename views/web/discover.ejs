@@ -1,0 +1,49 @@
+<% include header %>
+<div style="margin-top: 60px;" class="container" ng-app="liss">
+    <div style="margin-left: 15px;">
+        <h4 style="color: #317eac;">全部日记</h4>
+        <hr>
+        <div class="Diary-wrap" ng-controller="lis" >
+            <p class="hide" id="errorInfo">暂时无用户发表日记，快来发表吧</p>
+            <div class="Diary-row" style="position: relative;margin: 25px 0;" ng-repeat="list in lists">
+                <div class="Diary-left" style="position: absolute;left: 0;top: 0;">
+                    <a href="/home/{{list.email}}" title="">
+                        <img style="width: 50px;height: 50px;border-radius: 5px;" src="{{list.logo}}" alt="{{list.name}}">
+                    </a>
+                </div>
+                <div class="Diary-right" style="margin-left: 60px;">
+                    <h4>
+                        <a style="color: #2fa4ea;" href="/diary?id={{list._id}}">{{list.name}}的日记</a>
+                        <a href="/typeid/{{list.typeid}}/{{list.name}}">
+                            <small>[{{list.typeid}}]</small>
+                        </a>
+                        <small ng-if="list.weather">[天气：{{list.weather}}]</small>
+                        <small ng-if="list.mood">[心情：{{list.mood}}]</small>
+                        <small ng-if="list.location">[地点：{{list.location}}]</small>
+                    </h4>
+                    <div class="Diary-content">
+                        <p style="line-height: 40px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{list.content}}</p>
+                    </div>
+                    <div class="bar">{{list.time.minute}} <small>{{list.comments.length}}回复 </small><small>{{list.pv}}阅读 </small></div>
+                </div>
+            </div>
+            <% include page %>
+        </div>
+    </div>
+</div>
+<% include footer %>
+<script>
+    var list = angular.module('liss',[]);
+    list.controller('lis',function ($scope,$http) {
+        $scope.page = "<%= page %>";
+        //查询所有日记
+        $http.get('/lis?p='+$scope.page)
+            .success(function(data){
+                if(data && data.length!=0){
+                    $scope.lists = data;
+                }else {
+                    $('#errorInfo').removeClass('hide');
+                }
+            })
+    })
+</script>

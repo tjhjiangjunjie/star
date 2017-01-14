@@ -1,0 +1,37 @@
+<div style="border: 1px solid #e5e5e5;background-color: #f1f1f1;padding: 20px;">
+    <p style="font-size: 20px;color: #317eac;">总有一些不经意的时光，需要被镌刻.</p>
+    <p style="font-size: 20px;color: #317eac;">此时已有<%= users.length %>位朋友创建了<%= total %>本日记</p>
+</div>
+<% posts.forEach(function (post, index) { %>
+<div class="Diary-wrap" style="margin-left: 15px;">
+    <!--<p class="hide" id="errorInfo">您可以先关注一些用户，你自己的日记和他们的日记都会出现在你的时间线上。</p>-->
+    <div class="Diary-row" style="position: relative;margin: 35px 0;">
+        <div class="Diary-left" style="position: absolute;left: 0;top: 0;">
+            <a href="/home/<%= post.email %>" title="">
+                <img style="width: 50px;height: 50px;border-radius: 5px;" src="<%= post.logo %>" alt="<%= post.name %>">
+            </a>
+        </div>
+        <div class="Diary-right" style="margin-left: 60px;">
+            <h4>
+                <a style="color: #2fa4ea;" href="/diary?id=<%= post._id %>"><%= post.name %>的日记</a>
+                <a href="/typeid/<%= post.typeid %>/<%= post.name %>">
+                    <small>[<%= post.typeid %>]</small>
+                </a>
+                <% if(post.weather){ %>
+                <small>[天气：<%= post.weather %>]</small>
+                <% } %>
+                <% if(post.mood){ %>
+                <small>[心情：<%= post.mood %>]</small>
+                <% } %>
+                <% if(post.location){ %>
+                <small>[地点：<%= post.location %>]</small>
+                <% } %>
+            </h4>
+            <div class="Diary-content">
+                <p style="line-height: 40px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><%= post.content %></p>
+            </div>
+            <div class="bar" style="color: #888;"><%= post.time.minute %> <small><%= post.comments.length %>回复 </small><small><%= post.pv %>阅读 </small></div>
+        </div>
+    </div>
+</div>
+<% }) %>

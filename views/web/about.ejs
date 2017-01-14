@@ -1,0 +1,23 @@
+    <div class="User-box well">
+        <dl class="pl">
+            <dt style="margin-bottom: 10px;">
+                <img style="width: 150px;height: 150px;" src="<%= logo %>" title="<%= name %>" class="img-rounded">
+            </dt>
+            <dd>
+                <p style="margin-top: 30px;"> <%= name %> 于 <%= time %> 加入</p>
+            </dd>
+        </dl>
+    </div>
+    <div class="row Note-list" style="padding: 0px 20px;">
+        <h4 style="color: #317ebe;"><%= name %>的日记本<small>(<%= types.length+1 %>)</small></h4>
+        <ol style="padding: 10px 30px;">
+            <li>
+                <a style="color: #2fa4ea;" title="默认日记" href="/typeid/默认日记/<%= name %>">默认日记</a>
+            </li>
+            <% types.forEach(function (type,index) { %>
+            <li style="margin:10px 0;">
+                <a style="color: #2fa4ea;" title="<%= type.typeid %>" href="/typeid/<%= type.typeid %>/<%= name %>"><%= type.typeid %></a>
+            </li>
+            <% }) %>
+        </ol>
+    </div>

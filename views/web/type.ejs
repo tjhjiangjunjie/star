@@ -1,0 +1,59 @@
+<% include header %>
+<div class="container" style="margin-top: 70px;">
+    <div class="col-md-12">
+        <h2 style="color: #317eac;">管理日记本</h2>
+        <hr>
+        <div class="control-group">
+            <h3 style="color: #317eac;">添加</h3>
+            <% include hint %>
+            <form action="/addType" method="post" class="form-horizontal">
+                <div>
+                    <input type="text" name="typeid" maxlength="10" style="margin:20px 0;width: 220px;">
+                </div>
+                <p>
+                    <button type="submit" class="btn btn-primary" style="border-radius: 3px;">添加日记本</button>
+                </p>
+            </form>
+        </div>
+
+
+        <% if(types.length!=0){ %>
+        <div class="control-group">
+            <h3 style="color: #317eac;">修改<small style="color: #888;">(默认日记本不可修改)</small></h3>
+            <form action="/type/update" method="post" class="form-horizontal">
+                <div>
+                    <select style="margin:20px 0;width: 210px;height: 30px;" id="J_updateNote" name="oldTypeid">
+                        <% types.forEach(function (type,index) { %>
+                        <option value="<%= type.typeid %>"><%= type.typeid %></option>
+                        <% }) %>
+                    </select>
+                    <div>
+                        <input type="text" name="newTypeid" id="J_editbookname" maxlength="10" style="margin-bottom:10px;width: 220px;vertical-align:middle;">
+                    </div>
+                    <p>
+                        <button type="submit" class="btn btn-primary" style="border-radius: 3px;">修改</button>
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class="control-group">
+            <h3 style="color: #317eac;">删除<small style="color: #888;">(该日记本若有日记将不能删除)</small></h3>
+            <form action="/type/remove" method="post" class="form-horizontal">
+                <p>
+                    <select style="margin:20px 0;width: 210px;height: 30px;" id="J_delNote" name="bookid" style="vertical-align:middle;">
+                        <% types.forEach(function (type,index) { %>
+                        <option value="<%= type.typeid %>"><%= type.typeid %></option>
+                        <% }) %>
+                    </select>
+                </p>
+                <p>
+                    <button type="submit" class="btn btn-primary" style="border-radius: 3px;">删除日记本</button>
+                </p>
+            </form>
+        </div>
+        <% }else { %>
+            <p>您还没有创建任何自定义的日记本</p>
+        <% } %>
+    </div>
+</div>
+<% include footer %>

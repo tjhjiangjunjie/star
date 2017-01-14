@@ -1,0 +1,32 @@
+<div id="fy" style="margin-bottom: 20px;margin-left: 10px;">
+    <% if (!isFirstPage) { %>
+    <span class="firstpage"><a title="首页" href="?p=1">首页</a></span>
+    <span class="prepage"><a title="上一页" href="?p=<%= page-1 %>">上一页</a></span>
+    <% } %>
+    <% if(Math.ceil(total/10)<=3){ %>
+    <% for(var i=1;i<=Math.ceil(total/10);i++){ %>
+    <% if(page==i){ %>
+    <span class="nowpage1"><a href="javascript:;"><%= i %></a></span>
+    <% }else{ %>
+    <span><a href="?p=<%= i %>"><%= i %></a></span>
+    <% } %>
+    <% } %>
+    <% }else if(page>=2 && page<=Math.ceil(total/10)-1) { %>
+    <span><a href="?p=<%= page-1 %>"><%= page-1%></a></span>
+    <span class="nowpage1"><a href="javascript:;"><%= page %></a></span>
+    <span><a href="?p=<%= page+1 %>"><%= page+1 %></a></span>
+    <% }else if(page==1 && Math.ceil(total/10)>3){ %>
+    <span class="nowpage1"><a href="javascript:;"><%= page %></a></span>
+    <span><a href="?p=<%= page+1 %>"><%= page+1 %></a></span>
+    <span><a href="?p=<%= page+2 %>"><%= page+2 %></a></span>
+    <% }else if(page==Math.ceil(total/10) && Math.ceil(total/10)>3){ %>
+    <span><a href="?p=<%= page-2 %>"><%= page-2 %></a></span>
+    <span><a href="?p=<%= page-1 %>"><%= page-1 %></a></span>
+    <span class="nowpage1"><a href="javascript:;"><%= page %></a></span>
+    <% } %>
+
+    <% if (!isLastPage) { %>
+    <span class="nextpage"><a title="下一页" href="?p=<%= page+1 %>">下一页</a></span>
+    <span class="firstpage"><a title="尾页" href="?p=<%= Math.ceil(total/10) %>">尾页</a></span>
+    <% } %>
+</div>

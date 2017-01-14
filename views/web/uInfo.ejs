@@ -1,0 +1,144 @@
+<% include header %>
+<div class="container" ng-app="uInfo">
+    <div class="col-md-12">
+        <h4 style="margin-top: 70px;">账号设置</h4>
+        <hr>
+        <div class="uInfos" ng-controller="userInfo">
+            <form class="form-horizontal" name="myForm" ng-submit="processForm(myForm.$valid)" novalidate>
+                <div class="col-md-2 clearfix" style="position:absolute;right:80px;top:90px;">
+                    <img style="width: 150px;height: 150px;" ng-cloak ng-src="{{formData.logo}}" alt="{{formData.name}}" class="img-thumbnail" id="userLogo">
+                    <p class="text-center" id="uploadULogoImg"><a href="javascript:void(0)">修改</a></p>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">&nbsp;</label>
+                    <div class="col-md-4">
+                        <p class="text-danger hide" id="errorInfo"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-4">
+                        <input type="email" class="form-control" name="email" ng-model="formData.email" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">昵称</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control"  name="name" ng-minlength="2" ng-maxlength="10" ng-pattern="/[\u4e00-\u9fa50-9a-zA-Z]/" ng-model="formData.name" />
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="myForm.name.$invalid && !myForm.name.$pristine"><i class="glyphicon glyphicon-info-sign"></i>2-10个中文、英文或数字字符</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">性别</label>
+                    <div class="col-sm-4">
+                        <select style="height: 30px;" name="gender" ng-model="formData.gender">
+                            <option value="">---选择性别---</option>
+                            <option value="0">女</option>
+                            <option value="1">男</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">所在城市</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="city" class="form-control" ng-model="formData.city" ng-minlength="0" ng-maxlength="12"/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="myForm.city.$invalid && !myForm.city.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 0-12个非特殊字符</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">学校</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control"  name="company" ng-minlength="0" ng-maxlength="12" ng-model="formData.company"/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="myForm.company.$invalid && !myForm.company.$pristine"><i class="glyphicon glyphicon-info-sign"></i> 0-12个非特殊字符</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">QQ号码</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control"  name="qq" ng-minlength="0" ng-model="formData.qq" ng-pattern="/^[1-9][0-9]{4,9}$/"/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="myForm.qq.$invalid && !myForm.qq.$pristine"><i class="glyphicon glyphicon-info-sign"></i>请填写正确的QQ号码</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" >移动电话</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" name="phoneNum" ng-model="formData.phoneNum" ng-pattern="/^1[3|4|5|8][0-9]\d{4,8}$/"/>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="myForm.phoneNum.$invalid && !myForm.phoneNum.$pristine"><i class="glyphicon glyphicon-info-sign"></i>请填写正确的手机号码</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">关于自己</label>
+                    <div class="col-sm-6">
+                        <textarea class="col-sm-12" name="comments" id="" rows="6" style="border:1px solid #dbe2e6;"  ng-model="formData.comments"></textarea>
+                        <label ng-cloak for="inputError" class="control-label text-danger" ng-show="myForm.comments.$invalid && !myForm.comments.$pristine"><i class="glyphicon glyphicon-info-sign"></i>请填写正确的介绍</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default" ng-disabled="myForm.$invalid">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<% include footer %>
+
+<script>
+    var webApp = angular.module('uInfo',[]);
+    webApp.controller('userInfo',function($scope,$http){
+        $scope.email = "<%= user.email %>";
+        if($scope.email){
+            //查询用户的信息
+            $http.get('/userInfo?email=' + $scope.email)
+                .success(function(result){
+                    $scope.formData = result;
+                })
+        };
+//        图片上传
+        $('#uploadULogoImg').uploadify({
+            'swf':'/plugins/uploadify/uploadify.swf',
+            'uploader':'/upload?type=images&key=userlogo',
+            'buttonText':'上传图片',
+            'buttonClass':'uploadify-btn-default',
+            'width':100,
+            'auto':true,
+            'fileTypeDesc': 'Image Files',
+            'fileTypeExts':'*.gif; *.jpg; *.png',
+            'multi':false,
+            //上传成功执行的函数
+            'onUploadSuccess':function(file,data,response){
+                if(data === 'typeError'){
+                    alert('文件类型不正确，请重新尝试');
+                    return;
+                }else{
+                    alert('上传成功');
+                    $("#userLogo").attr("src",data);
+                    $scope.formData.logo = data;
+                }
+            },
+            'onComplete': function(event, queueID, fileObj, response, data) {//当单个文件上传完成后触发
+                alert("文件:" + fileObj.name + " 上传成功！");
+            }
+        })
+        //修改用户的信息
+        $scope.processForm = function(isValid){
+            if(isValid){
+                $http({
+                    method : 'POST',
+                    url : "/userInfo/modify?email="+$scope.email,
+                    data : $.param($scope.formData),
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+                }).success(function(data) {
+                    if(data === "success"){
+                        alert('修改信息成功')
+                    }else{
+                        $('#errorInfo').removeClass('hide').text(data);
+                    }
+                });
+            }else{
+                alert("error");
+            }
+        };
+    })
+</script>

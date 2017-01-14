@@ -1,0 +1,50 @@
+
+<h4 style="color: #317eac;">全部日记</h4>
+<hr>
+<div class="Diary-wrap" >
+    <p class="hide" id="errorInfo">暂无用户发表日记，来写一篇吧...</p>
+    <div class="Diary-row" style="position: relative;margin: 25px 0;" ng-repeat="list in lists">
+        <div class="Diary-left" style="position: absolute;left: 0;top: 0;">
+            <a href="/home/{{list.email}}" title="{{list.name}}">
+                <img style="width: 50px;height: 50px;border-radius: 5px;" src="{{list.logo}}" alt="{{list.name}}">
+            </a>
+        </div>
+        <div class="Diary-right" style="margin-left: 60px;">
+            <h4>
+                <a style="color: #2fa4ea;" href="/diary?id={{list._id}}">{{list.name}}的日记</a>
+                <a href="/typeid/{{list.typeid}}/{{list.name}}">
+                    <small>[{{list.typeid}}]</small>
+                </a>
+                <small ng-if="list.weather">[天气：{{list.weather}}]</small>
+                <small ng-if="list.mood">[心情：{{list.mood}}]</small>
+                <small ng-if="list.location">[地点：{{list.location}}]</small>
+            </h4>
+            <div class="Diary-content">
+                <p style="line-height: 40px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{list.content}}</p>
+            </div>
+            <div class="bar" style="color:#888;">{{list.time.minute}} <small>{{list.comments.length}}回复 </small><small>{{list.pv}}阅读 </small></div>
+        </div>
+    </div>
+
+    <% include page %>
+
+</div>
+<script>
+    var list = angular.module('lists',[]);
+    list.controller('list',function ($scope,$http) {
+        $scope.email = "<%= user.email %>";
+        $scope.page = "<%= page %>"
+        if($scope.email){
+            //查询该用户的所有日记的总数
+            $http.get('/lists?email=' + $scope.email+'&p='+$scope.page)
+                .success(function(data){
+                    if(data && data.length!=0){
+                        $scope.lists = data.posts;
+                        $scope.users = data.users;
+                    }else {
+                        $('#errorInfo').removeClass('hide');
+                    }
+                })
+        };
+    })
+</script>

@@ -1,0 +1,45 @@
+<h4 style="color: #317eac;"><%= name %></h4>
+<hr>
+<% if(posts.length==0){ %>
+<p>额，他还神马都没有写过……</p>
+<% }else { %>
+<h4 style="color: #317eac;"><%= name %> <small style="font-size: 18px;">日记(<%= posts.length %>)</small></h4>
+<% } %>
+<% posts.forEach(function (post, index) { %>
+<div class="Diary-wrap">
+    <!--<p class="hide" id="errorInfo">您可以先关注一些用户，你自己的日记和他们的日记都会出现在你的时间线上。</p>-->
+    <div class="Diary-row" style="position: relative;margin: 35px 0;">
+        <div>
+            <h4>
+                <a style="color: #2fa4ea;" href="/diary?id=<%= post._id %>"><%= post.name %>的日记</a>
+                <a href="/typeid/<%= post.typeid %>/<%= post.name %>">
+                    <small>[<%= post.typeid %>]</small>
+                </a>
+                <% if(post.weather){ %>
+                <small>[天气：<%= post.weather %>]</small>
+                <% } %>
+                <% if(post.mood){ %>
+                <small>[心情：<%= post.mood %>]</small>
+                <% } %>
+                <% if(post.location){ %>
+                <small>[地点：<%= post.location %>]</small>
+                <% } %>
+            </h4>
+            <div class="Diary-content">
+                <p style="line-height: 40px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><%= post.content %></p>
+            </div>
+            <div class="bar" style="color: #888;display: inline-block;"><%= post.time.minute %> <small><%= post.comments.length %>回复 </small><small><%= post.pv %>阅读 </small></div>
+
+            <% if(user){ %>
+            <% if(user.name == post.name ){ %>
+            <div class="btn-group btn-group-xs" style="display: inline-block;">
+                <a type="button" class="btn btn-default" href="/edit/<%= post._id %>">Edit</a>
+                <a type="button" class="btn btn-danger" href="/remove/<%= post._id %>">Del</a>
+            </div>
+            <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% }) %>
+<% include page %>

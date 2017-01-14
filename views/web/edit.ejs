@@ -1,0 +1,41 @@
+<% include header %>
+<div class="container" style="margin-top: 70px;">
+    <div class="col-md-12">
+            <h4 style="color: #317eac;">编辑日记</h4>
+            <hr>
+            <div style="margin: 0 15px;">
+                <% include hint %>
+                <form method="post" action="/doEdit/<%= post._id %>" class="form-horizontal" name="form">
+                    <div class="form-group">
+                        <select style="width: 200px;display: inline-block;" name="typeid" class="form-control">
+                            <option value="<%= post.typeid %>"><%= post.typeid %></option>
+                            <option value="默认日记">默认日记</option>
+                        </select>
+                        <a href="/type" style="color: #317eac;margin-left: 10px;">管理我的日记本</a>
+                    </div>
+                    <div class="form-group">
+                        <label>心情：</label>
+                        <input style="display: inline-block;width: 90px;" type="text" name="mood" value="<%= post.mood %>" placeholder="喜、怒、哀、乐..." class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>天气：</label>
+                        <input style="display: inline-block;width: 90px;" type="text" name="weather" value="<%= post.weather %>" placeholder="阴、晴、雨、风..." class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>地点：</label>
+                        <input style="display: inline-block;width: 200px;" type="text" name="location" placeholder="写日记的地点" value="<%= post.location %>" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>内容：</label>
+                        <textarea row="6" name="content" placeholder="内容" class="form-control"><%= post.content %></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="写日记" class="btn btn-success">
+                    </div>
+                </form>
+            </div>
+    </div>
+</div>
+<% include footer %>

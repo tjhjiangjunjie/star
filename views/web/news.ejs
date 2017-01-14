@@ -1,0 +1,12 @@
+<h4 style="color: #317eac;">最新注册</h4>
+<hr>
+<ul>
+    <li ng-repeat="user in users" style="overflow:hidden;float: left;text-align: center;width: 50px;height: 73px;margin: 5px 5px 10px 5px;">
+        <a href="/home/{{user.email}}">
+            <img style="width: 48px;height: 48px;border-radius: 5px;" src="{{user.logo}}" alt="{{user.name}}">
+        </a>
+        <span style="display: block">
+            <small>{{user.name}}</small>
+        </span>
+    </li>
+</ul>

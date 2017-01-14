@@ -1,0 +1,73 @@
+<% include header %>
+<div class="container" ng-app="webApp">
+    <div class="col-md-12">
+        <h4 style="margin-top: 70px;">写日记</h4>
+        <hr>
+        <div ng-controller="addArticle">
+            <form style="margin: 0 15px;" class="form-horizontal" role="form" name="form" ng-submit="postForm()">
+                <small class="text-danger hide" id="errorInfo"></small>
+                <div class="form-group">
+                    <select style="width: 200px;" name="typeid" class="form-control" ng-model="formData.typeid">
+                        <option value="">--选择分类--</option>
+                        <% types.forEach(function (type,index) { %>
+                        <option value="<%= type.typeid %>"><%= type.typeid %></option>
+                        <% }) %>
+                        <option value="默认日记">默认日记</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>心情：</label>
+                    <input style="display: inline-block;width: 90px;" type="text" name="mood" placeholder="喜、怒、哀、乐..."
+                           class="form-control" ng-model="formData.mood" minlength="1" maxlength="2" ng-pattern="/[\u4e00-\u9fa5]/">
+                </div>
+                <div class="form-group">
+                    <label>天气：</label>
+                    <input style="display: inline-block;width: 90px;" type="text" name="weather" placeholder="阴、晴、雨、风..."
+                           class="form-control" ng-model="formData.weather" minlength="1" maxlength="2" ng-pattern="/[\u4e00-\u9fa5]/">
+                </div>
+                <div class="form-group">
+                    <label>地点：</label>
+                    <input style="display: inline-block;width: 200px;" type="text" name="location" placeholder="写日记的地点"
+                           class="form-control" ng-model="formData.location" minlength="1" maxlength="10" ng-pattern="/[\u4e00-\u9fa5]/">
+                </div>
+
+                <div class="form-group">
+                    <label>内容：</label>
+                    <textarea row="6" name="content" placeholder="内容"
+                              class="form-control" ng-model="formData.content"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="写日记" class="btn btn-success" ng-disabled="!form.$dirty">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<% include footer %>
+
+<script>
+    var webApp = angular.module('webApp',[]);
+    webApp.controller('addArticle',function($scope,$http){
+        $scope.formData = {};
+        $scope.formData.email = "<%= user.email %>";
+        $scope.postForm = function(){
+            $http({
+                method:"POST",
+                url:'/doPost',
+                data: $.param($scope.formData),
+                headers:{'Content-Type':'application/x-www-form-urlencoded'}
+            }).success(function(data){
+                if(data=='success'){
+                    //成功
+                    alert('发表成功');
+                    window.location = '/';
+                }else{
+                    //失败
+                    $('#errorInfo').removeClass('hide').text(data);
+                }
+            })
+        }
+    })
+</script>

@@ -1,0 +1,73 @@
+<% include header %>
+<div class="container">
+    <div class="col-md-12">
+        <h4 style="margin-top: 70px;color: #317eac;"><%= post.name %> 的日记</h4>
+        <% if(user){ %>
+        <% if(user.name!=post.name){ %>
+        <div><a class="btn btn-primary btn-xs" style="border-radius: 3px;" href="/home/<%= post.email %>"><%= post.name %> 的主页</a></div>
+        <% } %>
+        <% } %>
+        <hr>
+        <div class="Diary-wrap">
+            <div class="Diary-row" style="position: relative;margin: 25px 0;">
+                <div class="Diary-left" style="position: absolute;left: 0;top: 0;">
+                    <a href="/home/<%= post.email %>" title="<%= post.name %>">
+                        <img style="width: 50px;height: 50px;border-radius: 5px;" src="<%= post.logo %>" alt="<%= post.name %>">
+                    </a>
+                </div>
+                <div class="Diary-right" style="margin-left: 60px;">
+                    <div style="margin-bottom: 20px;">
+                        <h4>
+                            <small style="color: #317eac;"><%= post.typeid %></small>
+                            <small>[天气：<%= post.weather %>]</small>
+                            <small>[心情：<%= post.mood %>]</small>
+                            <small>[地点：<%= post.location %>]</small>
+                        </h4>
+                        <div class="Diary-content">
+                            <p style="line-height: 40px;word-break:break-all;"><%= post.content %></p>
+                        </div>
+                        <div class="bar" style="display: inline-block;color: #888;"><%= post.time.minute %> <small><%= post.comments.length %>回复 </small><small><%= post.pv %>阅读 </small></div>
+
+                        <% if( user && user.name == post.name ){ %>
+                        <div class="btn-group btn-group-xs" style="display: inline-block;">
+                            <a type="button" class="btn btn-default" href="/edit/<%= post._id %>">Edit</a>
+                            <a type="button" class="btn btn-danger" href="/remove/<%= post._id %>">Del</a>
+                        </div>
+                        <% } %>
+
+                    </div>
+                    <div>
+                        <!--留言的展示-->
+                        <% post.comments.forEach(function(comment){ %>
+                        <div class="row-fluid show-grid comment-item" style="margin-top:25px;position: relative;">
+                            <div class="span1 comment-user" style="position: absolute;top: 0;left: 0;">
+                                <a href="/home/<%= comment.email %>">
+                                    <img style="width: 50px;height: 50px;border-radius: 5px;" src="<%= comment.logo %>" alt="" class="img-rounded"></a>
+                            </div>
+                            <div style="margin-left: 70px;">
+                                <div class="comment-bar" style="line-height: 30px;color: #888;"><%= comment.time %>
+                                    <a style="color: #2fb7f0;" href="/home/<%= comment.email %>"><%= comment.name %> </a>
+                                </div>
+                                <div class="comment-content" style="line-height: 30px;word-break:break-all;"><%= comment.content %></div>
+                            </div>
+                        </div>
+                        <% })%>
+                        <!--添加留言的表单-->
+                        <% if (user) { %>
+                        <form method="post" action="/comment/<%= post._id %>" name="form">
+                            <input type="hidden" name="name" value="<%= user.name %>"/><br><br>
+                            <% include hint %>
+                            <textarea name="content" rows="5" cols="80"></textarea><br>
+                            <input style="margin-top: 10px;border-radius: 3px;" class="btn btn-primary"  type="submit" value="回复"/>
+                        </form>
+                        <% }else{ %>
+                        <a style="color: #2fa4ea;" href="/login">登录之后就可以评论啦！</a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<% include footer %>
